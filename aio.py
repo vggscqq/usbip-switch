@@ -1,16 +1,14 @@
 import argparse
-import time
 import subprocess
 import threading
-import keyboard
 import requests
 from flask import Flask, redirect
 import logging
-import paramiko
 
 PORT = 5000
 
 server_usbIDs = ["3-1.3.2.1.2", "3-1.3.2.1.1"]
+usbipexepath = "C:\\Users\\vgscq\\Desktop\\usbip\\usbip.exe"
 #server_usbIDs = ["3-1.3.2.1.1"]
 client_usbIDs = []
 
@@ -23,20 +21,6 @@ for i in range(len(server_usbIDs)):
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
-def release_keys():
-    keyboard.release("ctrl")
-    keyboard.release("alt")
-    keyboard.release("1")
-    keyboard.release("2")
-    keyboard.release("3")
-    time.sleep(1)
-    keyboard.release("ctrl")
-    keyboard.release("alt")
-    keyboard.release("1")
-    keyboard.release("2")
-    keyboard.release("3")
 
 
 def switcher_web():
@@ -55,9 +39,9 @@ def switcher_web():
         #TODO
         #1. Announce demand to client
         for i in client_usbIDs:
-            command = f"C:\\Users\\vgscq\\Desktop\\usbip\\usbip.exe detach -p {i}"
+            command = f"{usbipexepath} detach -p {i}"
             print(command)
-            requests.post(f"http://{args.rhost}:{PORT}/run", data=command)
+            requests.post(f"http://{args.c}:{PORT}/run", data=command)
 
         #2. Unbind locally
 
@@ -76,9 +60,9 @@ def switcher_web():
 
         #2. Attach device on client
         for i in server_usbIDs:
-            command = f"C:\\Users\\vgscq\\Desktop\\usbip\\usbip.exe attach -r {args.lhost} -b {i}"
+            command = f"{usbipexepath} attach -r {args.shost} -b {i}"
             print(command)
-            requests.post(f"http://{args.rhost}:{PORT}/run", data=command)
+            requests.post(f"http://{args.c}:{PORT}/run", data=command)
 
         return redirect("/")
 
@@ -87,9 +71,9 @@ def switcher_web():
 def main():
     try:
         parser = argparse.ArgumentParser()
-        parser.add_argument('--lhost', required=True)
-        parser.add_argument('--rhost', required=True)
-        parser.add_argument('--mode', required=True, choices=['client', 'server'])
+        parser.add_argument('--shost', required=True)
+        parser.add_argument('--c', required=True)
+        #parser.add_argument('--mode', required=True, choices=['client', 'server'])
         global args 
         args = parser.parse_args()
 
