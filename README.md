@@ -1,6 +1,6 @@
 # usbip-switch
 
-Usbip=switch is a virtual KVM(except no V), which allows fast switching keyboard and mouse between two computers in one LAN.
+Usbip-switch is a virtual KVM(except no V), which allows fast switching keyboard and mouse between two computers in one LAN.
 
 ## Project terminology:
 * server - linux PC with keyboard and mouse connected to it. a.k.a. `--shost`
@@ -14,7 +14,6 @@ Usbip=switch is a virtual KVM(except no V), which allows fast switching keyboard
 ## Getting started:
 
 ### Server:
-
 1. Load usbip kernel module
     `sudo modprobe usbip_host`
 2. You might need to replace IDs of your devices on `aio.py` line 10
@@ -25,3 +24,6 @@ Usbip=switch is a virtual KVM(except no V), which allows fast switching keyboard
 ### Client (windows example):
 1. Download usbip.exe https://github.com/cezanne/usbip-win
 2. Run `python win_client.py`
+
+## Usage:
+Open in your web browser http://SERVER_IP:5000
