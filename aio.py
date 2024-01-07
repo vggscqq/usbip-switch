@@ -79,7 +79,7 @@ def main():
     try:
         parser = argparse.ArgumentParser()
         parser.add_argument('--shost', required=True)
-        parser.add_argument('--c', required=True)
+        parser.add_argument('--chost', required=True)
         #parser.add_argument('--mode', required=True, choices=['client', 'server'])
         global args 
         args = parser.parse_args()
