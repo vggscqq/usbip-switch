@@ -43,7 +43,7 @@ def switcher_web():
                 command = f"{usbipexepath} detach -p {i}"
                 print(command)
                 requests.post(f"http://{args.c}:{PORT}/run", data=command)
-        except Exception:
+        except Exception as e:
             logger.error(f"Error in demanding to server: {e}")
         #2. Unbind locally
 
@@ -66,7 +66,7 @@ def switcher_web():
                 command = f"{usbipexepath} attach -r {args.shost} -b {i}"
                 print(command)
                 requests.post(f"http://{args.c}:{PORT}/run", data=command)
-        except Exception:
+        except Exception as e:
             logger.error(f"Error in demanding to client, unable to connect: {e}")
             logger.error("Unbinding...")
             for i in server_usbIDs:
@@ -84,14 +84,11 @@ def main():
         global args 
         args = parser.parse_args()
 
-        if args.mode == 'client':
-            pass
 
-        elif args.mode == 'server':
-            hkT = threading.Thread(target=switcher_web, args=())
-            hkT.start()
+        hkT = threading.Thread(target=switcher_web, args=())
+        hkT.start()
 
-            hkT.join()
+        hkT.join()
     except Exception as e:
         logger.error(f"Error in main: {e}")
 
