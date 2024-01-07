@@ -38,11 +38,13 @@ def switcher_web():
     def to_server():
         #TODO
         #1. Announce demand to client
-        for i in client_usbIDs:
-            command = f"{usbipexepath} detach -p {i}"
-            print(command)
-            requests.post(f"http://{args.c}:{PORT}/run", data=command)
-
+        try:
+            for i in client_usbIDs:
+                command = f"{usbipexepath} detach -p {i}"
+                print(command)
+                requests.post(f"http://{args.c}:{PORT}/run", data=command)
+        except Exception:
+            logger.error(f"Error in demanding to server: {e}")
         #2. Unbind locally
 
         for i in server_usbIDs:
@@ -59,11 +61,16 @@ def switcher_web():
             subprocess.run([f"sudo usbip bind -b {i}"], shell=True)
 
         #2. Attach device on client
-        for i in server_usbIDs:
-            command = f"{usbipexepath} attach -r {args.shost} -b {i}"
-            print(command)
-            requests.post(f"http://{args.c}:{PORT}/run", data=command)
-
+        try:
+            for i in server_usbIDs:
+                command = f"{usbipexepath} attach -r {args.shost} -b {i}"
+                print(command)
+                requests.post(f"http://{args.c}:{PORT}/run", data=command)
+        except Exception:
+            logger.error(f"Error in demanding to client, unable to connect: {e}")
+            logger.error("Unbinding...")
+            for i in server_usbIDs:
+                subprocess.run([f"sudo usbip unbind -b {i}"], shell=True)
         return redirect("/")
 
     app.run(host="0.0.0.0")

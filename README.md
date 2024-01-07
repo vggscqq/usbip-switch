@@ -5,6 +5,7 @@ Usbip-switch is a virtual KVM(except no V), which allows fast switching keyboard
 ## Project terminology:
 * server - linux PC with keyboard and mouse connected to it. a.k.a. `--shost`
 * client - windows or linux* PC without neither keyboard nor mouse. a.k.a. `--chost`
+\* You'll need to modify code.
 
 ## Instalation:
 1. `git clone https://github.com/vggscqq/usbip-switch.git`
